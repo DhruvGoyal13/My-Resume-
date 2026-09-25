@@ -1,0 +1,12 @@
+node_modules/
+dist/
+data/submissions.json
+data/submissions.json.tmp
+.env
+.DS_Store
+npm-debug.log*
+
+# Private working files
+resume/
+*.docx
+*.pdf
