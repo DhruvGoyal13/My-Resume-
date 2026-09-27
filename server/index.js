@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const dataDir = path.join(rootDir, 'data')
 const dataFile = path.join(dataDir, 'submissions.json')
+const enquiriesFile = path.join(dataDir, 'enquiries.json')
 const distDir = path.join(rootDir, 'dist')
 const port = Number(process.env.PORT) || 3001
 
@@ -121,29 +122,81 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'dg-global-pitch-studio' })
 })
 
+app.post('/api/enquiries', async (req, res) => {
+  const now = Date.now()
+  const key = req.ip || 'unknown'
+  const previous = requests.get(key) || { count: 0, startedAt: now }
+
+  if (now - previous.startedAt > WINDOW_MS) {
+    requests.set(key, { count: 1, startedAt: now })
+  } else {
+    previous.count += 1
+    requests.set(key, previous)
+    if (previous.count > MAX_REQUESTS) {
+      return res.status(429).json({
+        ok: false,
+        message: 'Too many attempts. Please try again in a few minutes.',
+      })
+    }
+  }
+
+  const body = req.body || {}
+  const text = (value, max = 500) =>
+    typeof value === 'string' ? value.trim().slice(0, max) : ''
+
+  const enquiry = {
+    name: text(body.name, 160),
+    email: text(body.email, 200).toLowerCase(),
+    company: text(body.company, 160),
+    interest: text(body.interest, 120),
+    message: text(body.message, 3000),
+  }
+
+  if (!enquiry.name) return res.status(400).json({ ok: false, message: 'Please add your name.' })
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(enquiry.email)) {
+    return res.status(400).json({ ok: false, message: 'Please enter a valid email address.' })
+  }
+  if (enquiry.message.length < 10) {
+    return res.status(400).json({ ok: false, message: 'Please add a short message.' })
+  }
+
+  const record = {
+    submittedAt: new Date().toISOString(),
+    data: enquiry,
+  }
+
+  try {
+    await enqueueWrite(record, enquiriesFile)
+    return res.status(201).json({ ok: true, message: 'Your message has been received.' })
+  } catch (error) {
+    console.error('Could not save enquiry:', error)
+    return res.status(500).json({ ok: false, message: 'We could not send your message right now.' })
+  }
+})
+
 app.use('/api', (_req, res) => {
   res.status(404).json({ ok: false, message: 'API route not found.' })
 })
 
 let writeQueue = Promise.resolve()
 
-function enqueueWrite(record) {
+function enqueueWrite(record, file = dataFile) {
   writeQueue = writeQueue.then(async () => {
     await fs.mkdir(dataDir, { recursive: true })
 
     let submissions = []
     try {
-      const existing = await fs.readFile(dataFile, 'utf8')
+      const existing = await fs.readFile(file, 'utf8')
       const parsed = JSON.parse(existing)
       if (Array.isArray(parsed)) submissions = parsed
     } catch (error) {
-      if (error.code !== 'ENOENT') console.warn('Starting a new submissions file:', error.message)
+      if (error.code !== 'ENOENT') console.warn(`Starting a new ${path.basename(file)}:`, error.message)
     }
 
     submissions.push(record)
-    const tempFile = `${dataFile}.tmp`
+    const tempFile = `${file}.tmp`
     await fs.writeFile(tempFile, JSON.stringify(submissions, null, 2), 'utf8')
-    await fs.rename(tempFile, dataFile)
+    await fs.rename(tempFile, file)
   })
 
   return writeQueue
