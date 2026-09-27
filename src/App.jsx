@@ -1,18 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  ArrowDown,
   ArrowRight,
   BarChart3,
-  Building2,
   Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   CircleDollarSign,
+  ClipboardCheck,
   Clock3,
+  Compass,
+  FileSpreadsheet,
   FileText,
+  Gauge,
   Globe2,
-  Layers3,
+  Handshake,
+  Landmark,
+  LineChart,
+  Lock,
   Mail,
   Menu,
   Phone,
@@ -20,83 +25,243 @@ import {
   ShieldCheck,
   Sparkles,
   Target,
-  TrendingUp,
   Users,
   X,
-  Zap,
 } from 'lucide-react'
+
+/* ==========================================================================
+   Positioning
+   ========================================================================== */
+
+const answers = [
+  {
+    number: '01',
+    question: 'What do you do?',
+    answer:
+      'We build the fundraising package investors respond to — pitch decks, financial models and the supporting materials that go out with them.',
+  },
+  {
+    number: '02',
+    question: 'Who do you help?',
+    answer:
+      'Startups and growing businesses raising capital, from pre-seed and seed through Series A, growth rounds and beyond.',
+  },
+  {
+    number: '03',
+    question: 'Why should I trust you?',
+    answer:
+      'Founder-led by a finance and transaction advisory practitioner — 12+ years across financial modelling, M&A and investor communication.',
+  },
+]
+
+/* ==========================================================================
+   What we do
+   ========================================================================== */
 
 const services = [
   {
     number: '01',
-    icon: Target,
-    title: 'Pitch strategy',
-    text: 'We find the sharpest version of your story, then structure every slide around the decisions investors need to make.',
-    tag: 'Positioning',
+    icon: Presentation,
+    title: 'Pitch decks',
+    text: 'Investor-focused presentations that clearly communicate the business opportunity — structured so an investor understands the thesis, the proof and the ask without friction.',
+    points: ['12–16 slides', 'Investor-tested structure', 'Editable source file'],
   },
   {
     number: '02',
-    icon: BarChart3,
-    title: 'Financial storytelling',
-    text: 'Revenue, market, unit economics and forecasts become a credible growth case—not a collection of disconnected numbers.',
-    tag: 'Evidence',
+    icon: LineChart,
+    title: 'Financial modeling',
+    text: 'Revenue projections, unit economics, assumptions and financial forecasts — driver-based, documented and defensible under diligence.',
+    points: ['Driver-based model', 'Unit economics', 'Scenarios & sensitivity'],
   },
   {
     number: '03',
-    icon: Presentation,
-    title: 'Investor deck design',
-    text: 'Clear hierarchy, persuasive visuals and precise language turn your business into a presentation people remember.',
-    tag: 'Design',
+    icon: FileText,
+    title: 'Investor materials',
+    text: 'Teasers, one-pagers, investment memos and supporting documents that carry the same story consistently across every investor conversation.',
+    points: ['Teaser & one-pager', 'Investment memo', 'Data room support'],
   },
   {
     number: '04',
-    icon: Users,
-    title: 'Founder storytelling',
-    text: 'Practice the narrative with us so you can speak with clarity, confidence and consistency when the room gets live.',
-    tag: 'Coaching',
+    icon: Target,
+    title: 'Fundraising strategy',
+    text: 'Positioning the company, identifying the right investor profile and preparing the fundraising story before a single slide is designed.',
+    points: ['Investor profiling', 'Raise sizing', 'Positioning & story'],
   },
 ]
 
-const process = [
+/* ==========================================================================
+   Process
+   ========================================================================== */
+
+const processSteps = [
   {
     number: '01',
-    title: 'Discover',
-    text: 'We learn the business, market, ambition and investor context.',
+    title: 'Understand',
+    summary: 'We learn the business before we shape the story.',
+    text: 'We understand your business, market, financials and fundraising objective. Nothing is written until we can explain your business back to you in one clear sentence.',
+    duration: 'Week 1',
+    outputs: [
+      'Business, market and financial diagnostic',
+      'Unit economics and traction review',
+      'Fundraising objective, raise size and investor profile',
+    ],
   },
   {
     number: '02',
-    title: 'Distill',
-    text: 'We turn complex inputs into one clear, evidence-led storyline.',
+    title: 'Build',
+    summary: 'We develop the investment story, structure and visual presentation.',
+    text: 'We develop the investment story, structure and visual presentation — the narrative, the financial model and the deck designed together so the numbers and the argument agree.',
+    duration: 'Weeks 2–3',
+    outputs: [
+      'Investment narrative and deck structure',
+      'Driver-based financial model with documented assumptions',
+      'Designed deck, teaser and one-pager — first draft',
+    ],
   },
   {
     number: '03',
-    title: 'Build',
-    text: 'We develop, write and design the deck slide by slide.',
+    title: 'Refine',
+    summary: 'We stress-test the narrative around investor expectations.',
+    text: 'We stress-test the narrative and refine the deck around investor expectations — the objections a partner will raise, the numbers that need defending, and the slides that are not earning their place.',
+    duration: 'Week 4',
+    outputs: [
+      'Investor-style stress test and Q&A bank',
+      'Narrative, number and design revisions',
+      'Founder rehearsal and delivery coaching',
+    ],
   },
   {
     number: '04',
-    title: 'Rehearse',
-    text: 'We pressure-test the story and prepare you to present it.',
+    title: 'Deliver',
+    summary: 'You receive a polished, investor-ready fundraising package.',
+    text: 'You receive a polished, investor-ready fundraising package — final deck, model, supporting documents and a clear picture of how to run the process from here.',
+    duration: 'Week 5+',
+    outputs: [
+      'Final deck, teaser, one-pager and memo',
+      'Editable model with an assumptions appendix',
+      'Support through investor meetings and follow-ups',
+    ],
   },
 ]
 
+/* ==========================================================================
+   Our work
+   ========================================================================== */
+
 const deckSections = [
-  ['01', 'Open with clarity', 'Cover, important context and the one-line company thesis'],
-  ['02', 'Company at a glance', 'What you do, who you serve, your vision and credentials'],
-  ['03', 'Problem & market', 'Why the problem matters now, market size and timing'],
-  ['04', 'Product & solution', 'Platform deep dive, workflow and complete customer journey'],
-  ['05', 'Differentiation & market', 'Why you win and the customers and geographies you target'],
-  ['06', 'Traction & validation', 'Growth, milestones, partnerships and credible proof'],
-  ['07', 'Business model & financials', 'Revenue model, performance, projections and CAGR'],
-  ['08', 'Competitive position', 'SWOT, alternatives and the defensible competitive landscape'],
+  ['01', 'Company overview', 'What you do, who you serve, your vision and credentials'],
+  ['02', 'Problem & market', 'Why the problem matters now, market size and timing'],
+  ['03', 'Product & solution', 'Platform deep dive, workflow and customer journey'],
+  ['04', 'Differentiation', 'Why you win, and the customers and geographies you target'],
+  ['05', 'Traction & validation', 'Growth, milestones, partnerships and credible proof'],
+  ['06', 'Business model', 'Revenue model, pricing and unit economics'],
+  ['07', 'Financial projections', 'Forecast, drivers, margins and path to profitability'],
+  ['08', 'Competitive position', 'Alternatives, SWOT and the defensible landscape'],
   ['09', 'Team, raise & close', 'Team, advisors, capital use and why invest now'],
 ]
+
+const modelRows = [
+  ['ARR — year 3', '$4.2M'],
+  ['Revenue CAGR', '68%'],
+  ['Gross margin', '82%'],
+  ['Burn multiple', '1.4×'],
+  ['Runway', '19 months'],
+]
+
+const engagementRows = [
+  ['Deck & narrative', '4–6 weeks'],
+  ['Financial model', '3-year, driver-based'],
+  ['Investor materials', 'Teaser + one-pager'],
+  ['Support through raise', 'Included'],
+]
+
+/* ==========================================================================
+   Industries
+   ========================================================================== */
+
+const industries = [
+  {
+    name: 'SaaS & Technology',
+    text: 'Recurring revenue businesses where retention, unit economics and expansion tell the story.',
+  },
+  {
+    name: 'FinTech',
+    text: 'Regulated, data-heavy models that need a clear bridge from product to economics.',
+  },
+  {
+    name: 'Consumer & D2C',
+    text: 'Brand, cohort and repeat-purchase businesses with fast-moving marketing economics.',
+  },
+  {
+    name: 'Healthcare',
+    text: 'Long sales cycles, clinical evidence and reimbursement logic investors test closely.',
+  },
+  {
+    name: 'EdTech',
+    text: 'Outcomes-driven platforms that must prove impact, not just usage.',
+  },
+  {
+    name: 'Marketplace & Services',
+    text: 'Two-sided businesses where supply, liquidity and take rate drive the model.',
+  },
+  {
+    name: 'Manufacturing',
+    text: 'Asset and supply-chain businesses with margin, capacity and capex storylines.',
+  },
+  {
+    name: 'Climate & Sustainability',
+    text: 'Capital-intensive, mission-led companies raising on a long payback horizon.',
+  },
+]
+
+/* ==========================================================================
+   About
+   ========================================================================== */
+
+const credentials = [
+  {
+    icon: Landmark,
+    title: 'Finance & investment banking',
+    text: 'Capital structure thinking, valuation context and the analytical standard investors are used to. We build the numbers the way a diligence team will read them.',
+  },
+  {
+    icon: Handshake,
+    title: 'Transaction advisory & M&A',
+    text: 'Exposure across the transaction lifecycle — from first outreach and negotiation through to closing. We know what a buyer, and then an investor, will push on.',
+  },
+  {
+    icon: FileSpreadsheet,
+    title: 'Financial modelling',
+    text: 'Driver-based forecasts, unit economics, scenario and sensitivity analysis. Assumptions are documented so the model survives diligence instead of collapsing under it.',
+  },
+  {
+    icon: Compass,
+    title: 'Fundraising strategy',
+    text: 'Positioning the company, identifying the right investor profile, sequencing the raise and preparing the story before any slide is designed.',
+  },
+  {
+    icon: Users,
+    title: 'Businesses we work with',
+    text: 'Pre-seed through growth-stage companies across SaaS, fintech, consumer, healthcare, marketplaces, industrial and climate businesses — plus the founders raising their first round.',
+  },
+]
+
+const stats = [
+  ['12+', 'Years in finance & advisory'],
+  ['100%', 'Founder-led engagements'],
+  ['4–6 wks', 'Typical deck timeline'],
+  ['Pre-seed → B', 'Stages supported'],
+]
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
 
 const faqs = [
   {
     question: 'When should we involve you?',
     answer:
-      'The best time is usually six to ten weeks before a fundraising process begins. That gives us enough time to validate the story, build the financial narrative and create a deck that works in the room—not just on screen.',
+      'The best time is usually six to ten weeks before a fundraising process begins. That gives us enough time to validate the story, build the financial narrative and create a deck that works in the room — not just on screen.',
   },
   {
     question: 'Do you work with early-stage companies?',
@@ -109,9 +274,9 @@ const faqs = [
       'Most investor decks take four to six weeks from a complete brief to a polished final version. A simple redesign can move faster; a complex new narrative may take longer. We agree on milestones before work begins.',
   },
   {
-    question: 'What do you need from us?',
+    question: 'Do you build the financial model as well?',
     answer:
-      'Start with the guided brief on this website. We will also need access to any existing materials, product information, financial model and market research you already have. You do not need to make the story presentable—we will shape it with you.',
+      'Yes. The model and the deck are built together. You receive a driver-based forecast with documented assumptions, unit economics, scenarios and a summary appendix an investor can follow without a call.',
   },
   {
     question: 'Can you keep our information confidential?',
@@ -120,15 +285,19 @@ const faqs = [
   },
 ]
 
-const industries = [
-  'B2B SaaS',
-  'Consumer',
-  'Fintech',
-  'Healthtech',
-  'AI / Data',
-  'Climate',
-  'E-commerce',
-  'Industrials',
+/* ==========================================================================
+   Intake modal — form data
+   ========================================================================== */
+
+const industriesOptions = [
+  'SaaS & Technology',
+  'FinTech',
+  'Consumer & D2C',
+  'Healthcare',
+  'EdTech',
+  'Marketplace & Services',
+  'Manufacturing',
+  'Climate & Sustainability',
   'Other',
 ]
 
@@ -137,6 +306,7 @@ const stages = [
   'Pre-seed',
   'Seed',
   'Series A',
+  'Series B',
   'Growth',
   'Private / profitable',
 ]
@@ -168,9 +338,13 @@ const emptyBrief = {
   consent: false,
 }
 
+/* ==========================================================================
+   Shared components
+   ========================================================================== */
+
 function Logo({ light = false }) {
   return (
-    <a className={`logo ${light ? 'logo--light' : ''}`} href="#top" aria-label="DG Global home">
+    <a className="logo" href="#top" aria-label="DG Global — home">
       <img
         className="brand-logo"
         src={light ? '/dg-global-logo-light.svg' : '/dg-global-logo.svg'}
@@ -199,7 +373,7 @@ function useReveal() {
           }
         })
       },
-      { threshold: 0.12 },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
     )
 
     elements.forEach((element) => observer.observe(element))
@@ -207,12 +381,35 @@ function useReveal() {
   }, [])
 }
 
+function SectionIntro({ kicker, title, text, light = false }) {
+  return (
+    <div className={`section-intro reveal ${light ? 'section-intro--light' : ''}`}>
+      <span className="kicker">{kicker}</span>
+      <h2>{title}</h2>
+      {text && <p>{text}</p>}
+    </div>
+  )
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+const navLinks = [
+  ['Services', '#services'],
+  ['Our Work', '#work'],
+  ['Process', '#process'],
+  ['Industries', '#industries'],
+  ['About', '#about'],
+  ['Contact', '#contact'],
+]
+
 function Header({ openBrief }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -226,22 +423,30 @@ function Header({ openBrief }) {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <header className={`site-header ${scrolled ? 'site-header--scrolled' : ''}`}>
+    <header
+      className={`site-header ${scrolled ? 'site-header--scrolled' : ''} ${menuOpen ? 'site-header--menu-open' : ''}`}
+    >
       <div className="container header__inner">
-        <Logo light={!scrolled && !menuOpen} />
+        <Logo light={!scrolled || menuOpen} />
         <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`} aria-label="Main navigation">
-          <a href="#services" onClick={closeMenu}>Services</a>
-          <a href="#approach" onClick={closeMenu}>Approach</a>
-          <a href="#deck" onClick={closeMenu}>Deck anatomy</a>
-          <a href="#faq" onClick={closeMenu}>FAQ</a>
-          <a href="#contact" onClick={closeMenu}>Contact</a>
-          <button className="button button--small button--dark header__mobile-cta" onClick={() => { closeMenu(); openBrief() }}>
-            Start your brief <ArrowRight size={16} />
+          {navLinks.map(([label, href]) => (
+            <a key={href} href={href} onClick={closeMenu}>
+              {label}
+            </a>
+          ))}
+          <button
+            className="button button--brass button--small header__mobile-cta"
+            onClick={() => {
+              closeMenu()
+              openBrief()
+            }}
+          >
+            Book a consultation <ArrowRight size={16} />
           </button>
         </nav>
         <div className="header__actions">
-          <button className="button button--small button--dark" onClick={openBrief}>
-            Start your brief <ArrowRight size={16} />
+          <button className="button button--small" onClick={openBrief}>
+            Book a consultation <ArrowRight size={16} />
           </button>
           <button
             className="menu-toggle"
@@ -258,82 +463,664 @@ function Header({ openBrief }) {
   )
 }
 
-function HeroVisual() {
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+const kpis = [
+  { label: 'Revenue CAGR', value: '68%', note: '3-year plan' },
+  { label: 'Gross margin', value: '82%', note: 'Year 3' },
+  { label: 'Burn multiple', value: '1.4×', note: 'Disciplined' },
+]
+
+const barGeometry = [
+  { x: 12, y: 96 },
+  { x: 76, y: 76 },
+  { x: 140, y: 56 },
+  { x: 204, y: 36 },
+  { x: 268, y: 18 },
+]
+
+function HeroPanel() {
   return (
-    <div className="hero-visual" aria-label="A preview of an investor pitch slide">
-      <div className="hero-visual__orb hero-visual__orb--one" />
-      <div className="hero-visual__orb hero-visual__orb--two" />
-      <div className="deck-window">
-        <div className="deck-window__bar">
-          <div className="window-dots"><i /><i /><i /></div>
-          <span>Example deck · Series A</span>
-          <span className="deck-window__count">07 / 14</span>
+    <div className="hero__panel">
+      <div className="panel">
+        <div className="panel__bar">
+          <span>Illustrative model output</span>
+          <span>Driver-based · 5 year</span>
         </div>
-        <div className="deck-window__body">
-          <aside className="deck-sidebar">
-            <span className="deck-sidebar__label">Story flow</span>
-            {['Thesis', 'Problem', 'Product', 'Market', 'Traction'].map((item, index) => (
-              <div className={`deck-sidebar__item ${index === 3 ? 'is-active' : ''}`} key={item}>
-                <span>0{index + 1}</span>{item}
+        <div className="panel__body">
+          <div className="panel__kpis">
+            {kpis.map((kpi) => (
+              <div className="panel__kpi" key={kpi.label}>
+                <span>{kpi.label}</span>
+                <strong>{kpi.value}</strong>
+                <small>{kpi.note}</small>
               </div>
             ))}
-          </aside>
-          <div className="deck-slide">
-            <div className="deck-slide__eyebrow">The market opportunity</div>
-            <h3>A large market is useful. A timely market wins.</h3>
-            <div className="market-chart">
-              <div className="market-chart__labels">
-                <span>Now</span><span>+3 yrs</span><span>+5 yrs</span>
-              </div>
-              <svg viewBox="0 0 360 118" role="img" aria-label="Market growth chart">
-                <defs>
-                  <linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#d9ff63" stopOpacity=".45" />
-                    <stop offset="100%" stopColor="#d9ff63" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path className="chart-line" d="M4 104 C68 99 72 85 125 87 S192 70 218 61 S280 30 356 10" />
-                <path fill="url(#chartFill)" d="M4 104 C68 99 72 85 125 87 S192 70 218 61 S280 30 356 10 L356 118 L4 118 Z" />
-                <circle cx="356" cy="10" r="5" />
-              </svg>
-              <div className="market-chart__metric">
-                <strong>3.4×</strong>
-                <span>category growth</span>
+          </div>
+
+          <div className="chart">
+            <div className="chart__head">
+              <span>Revenue build &amp; EBITDA margin</span>
+              <div className="chart__legend">
+                <span><i className="fill" />Revenue</span>
+                <span><i className="line" />Margin</span>
               </div>
             </div>
+            <svg className="chart__svg" viewBox="0 0 320 126" role="img" aria-label="Bar chart of projected revenue over five years with an EBITDA margin line trending upward">
+              {[18, 52, 86].map((y) => (
+                <line key={y} className="chart__grid-line" x1="0" y1={y} x2="320" y2={y} />
+              ))}
+              <line className="chart__axis" x1="0" y1="120" x2="320" y2="120" />
+              {barGeometry.map((bar, index) => (
+                <rect
+                  key={bar.x}
+                  className={index === barGeometry.length - 1 ? 'chart__bar chart__bar--last' : 'chart__bar'}
+                  x={bar.x}
+                  y={bar.y}
+                  width="40"
+                  height={120 - bar.y}
+                />
+              ))}
+              <path
+                className="chart__line"
+                d="M32 104 L96 97 L160 90 L224 83 L288 76"
+              />
+            </svg>
+            <div className="chart__labels" aria-hidden="true">
+              <span>Year 1</span>
+              <span>Year 2</span>
+              <span>Year 3</span>
+              <span>Year 4</span>
+              <span>Year 5</span>
+            </div>
           </div>
+
+          <p className="panel__foot">
+            <Gauge size={16} />
+            Every assumption is documented, stress-tested and defensible under diligence.
+          </p>
         </div>
       </div>
-      <div className="proof-card proof-card--top">
-        <span className="proof-card__icon"><TrendingUp size={17} /></span>
-        <span><small>ARR growth</small><strong>+186% YoY</strong></span>
-      </div>
-      <div className="proof-card proof-card--bottom">
-        <span className="proof-card__icon proof-card__icon--orange"><Building2 size={17} /></span>
-        <span><small>Active customers</small><strong>1,240+</strong></span>
-        <span className="proof-card__check"><Check size={13} /></span>
-      </div>
-      <div className="visual-stamp">
-        <span>12+</span>
-        <small>years of<br />deck craft</small>
+
+      <div className="panel-badge">
+        <span className="panel-badge__icon"><BarChart3 size={17} /></span>
+        <span>
+          <small>Standard output</small>
+          <strong>Deck + model + teaser</strong>
+        </span>
       </div>
     </div>
   )
 }
 
-function SectionIntro({ kicker, title, text, light = false }) {
+function Hero({ openBrief }) {
   return (
-    <div className={`section-intro reveal ${light ? 'section-intro--light' : ''}`}>
-      <div className="kicker"><span />{kicker}</div>
-      <h2>{title}</h2>
-      {text && <p>{text}</p>}
-    </div>
+    <section className="hero" id="top">
+      <div className="hero__inner">
+        <div className="container hero__main">
+          <div className="hero__content">
+            <div className="hero__eyebrow">Fundraising advisory &amp; investor communication</div>
+            <h1>
+              Investor-ready pitch decks, financial storytelling and <em>fundraising materials.</em>
+            </h1>
+            <p className="hero__lede">
+              For startups and growing businesses. We turn complex operations, markets and financials into
+              the clear, credible package an investor can act on.
+            </p>
+            <div className="hero__actions">
+              <button className="button button--brass" onClick={openBrief}>
+                Book a consultation <ArrowRight size={17} />
+              </button>
+              <a className="text-link text-link--light" href="#services">
+                What we do
+              </a>
+            </div>
+            <div className="hero__note">
+              <span><Check size={14} /> Founder-led, start to finish</span>
+              <span><Lock size={14} /> Confidential by default</span>
+              <span><Clock3 size={14} /> 4–6 week typical timeline</span>
+            </div>
+          </div>
+          <HeroPanel />
+        </div>
+
+        <div className="container">
+          <div className="hero__answers">
+            {answers.map((item) => (
+              <div className="answer" key={item.number}>
+                <div className="answer__q">{item.number}</div>
+                <h2>{item.question}</h2>
+                <p>{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Services
+   ========================================================================== */
+
+function Services() {
+  return (
+    <section className="section" id="services">
+      <div className="container">
+        <div className="section-head">
+          <SectionIntro
+            kicker="What we do"
+            title={<>Fundraising support, <em>end to end.</em></>}
+            text="Four specific engagements that can be taken individually or run as one package. Every number, claim and slide is built to survive investor diligence."
+          />
+          <div className="section-head__aside reveal">
+            <strong>One senior team</strong>
+            No handoffs to a slide factory. The person who shapes your strategy is the person who designs your deck and models your financials.
+          </div>
+        </div>
+
+        <div className="services__grid">
+          {services.map((service, index) => {
+            const Icon = service.icon
+            return (
+              <article className="service-card reveal" style={{ '--delay': `${index * 60}ms` }} key={service.number}>
+                <div className="service-card__top">
+                  <span>{service.number}</span>
+                  <span className="service-card__icon"><Icon size={20} /></span>
+                </div>
+                <div>
+                  <h3>{service.title}</h3>
+                  <p>{service.text}</p>
+                  <ul className="service-card__list">
+                    {service.points.map((point) => <li key={point}>{point}</li>)}
+                  </ul>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Process — interactive
+   ========================================================================== */
+
+function Process({ openBrief }) {
+  const [active, setActive] = useState(0)
+  const tabRefs = useRef([])
+  const current = processSteps[active]
+
+  const onTabKeyDown = (event, index) => {
+    const forward = { ArrowRight: 1, ArrowDown: 1 }
+    const backward = { ArrowLeft: -1, ArrowUp: -1 }
+    const last = processSteps.length - 1
+
+    if (event.key in forward) {
+      event.preventDefault()
+      const next = (index + forward[event.key] + processSteps.length) % processSteps.length
+      setActive(next)
+      tabRefs.current[next]?.focus()
+    } else if (event.key in backward) {
+      event.preventDefault()
+      const next = (index + backward[event.key] + processSteps.length) % processSteps.length
+      setActive(next)
+      tabRefs.current[next]?.focus()
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      setActive(0)
+      tabRefs.current[0]?.focus()
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      setActive(last)
+      tabRefs.current[last]?.focus()
+    }
+  }
+
+  return (
+    <section className="section section--grey" id="process">
+      <div className="container">
+        <div className="section-head">
+          <SectionIntro
+            kicker="Our process"
+            title={<>What happens after <em>you contact us.</em></>}
+            text="A defined four-step engagement with agreed milestones, so you always know what is being worked on, what you need to send, and what you receive at the end."
+          />
+          <div className="section-head__aside reveal">
+            <strong>Five weeks, four steps</strong>
+            Select a step to see what happens in it and exactly what you receive when it closes.
+          </div>
+        </div>
+
+        <div className="process__layout reveal">
+          <div className="process-tabs" role="tablist" aria-label="Engagement process" aria-orientation="vertical">
+            {processSteps.map((step, index) => (
+              <button
+                key={step.number}
+                ref={(node) => { tabRefs.current[index] = node }}
+                className="process-tab"
+                type="button"
+                role="tab"
+                id={`process-tab-${index}`}
+                aria-selected={active === index}
+                aria-controls="process-panel"
+                tabIndex={active === index ? 0 : -1}
+                onClick={() => setActive(index)}
+                onKeyDown={(event) => onTabKeyDown(event, index)}
+              >
+                <span className="process-tab__num">{step.number}</span>
+                <span>
+                  <h3>{step.title}</h3>
+                  <p>{step.summary}</p>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div
+            className="process-detail"
+            role="tabpanel"
+            id="process-panel"
+            aria-labelledby={`process-tab-${active}`}
+          >
+            <div className="process-detail__meta">
+              <span>
+                Step {current.number} of {String(processSteps.length).padStart(2, '0')}
+              </span>
+              <em>{current.duration}</em>
+            </div>
+            <h3>{current.title}</h3>
+            <p className="process-detail__lede">{current.text}</p>
+            <p className="process-detail__label">What you get at the end of this step</p>
+            <ul className="process-outputs">
+              {current.outputs.map((output) => (
+                <li key={output}>
+                  <Check size={15} />
+                  {output}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="process__foot reveal">
+          <p>
+            <strong>You approve at every milestone.</strong> Narrative, model and design are reviewed with you before
+            anything moves forward, so nothing reaches investors that you have not signed off.
+          </p>
+          <button className="button button--navy" onClick={openBrief}>
+            Start with a consultation <ArrowRight size={17} />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Our work
+   ========================================================================== */
+
+function Work() {
+  return (
+    <section className="section" id="work">
+      <div className="container">
+        <div className="section-head">
+          <SectionIntro
+            kicker="Our work"
+            title={<>The package you <em>actually receive.</em></>}
+            text="Client decks and models are shared under NDA, but the structure below is what we build every time — a deliberate flow where each section removes the next investor objection."
+          />
+          <div className="section-head__aside reveal">
+            <strong>Nine sections, one argument</strong>
+            Every chapter earns the next. If a slide does not move the decision forward, it comes out.
+          </div>
+        </div>
+
+        <div className="work__layout">
+          <div className="work-list">
+            {deckSections.map(([number, title, text], index) => (
+              <div className="work-list__item reveal" style={{ '--delay': `${index * 35}ms` }} key={number}>
+                <span>{number}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <aside className="work__aside">
+            <div className="spec-card reveal">
+              <div className="spec-card__head">
+                <span>Illustrative model output</span>
+                <LineChart size={15} />
+              </div>
+              <div className="spec-card__rows">
+                {modelRows.map(([label, value]) => (
+                  <div className="spec-row" key={label}>
+                    <span>{label}</span>
+                    <strong className="up">{value}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="spec-card reveal">
+              <div className="spec-card__head">
+                <span>Typical engagement</span>
+                <ClipboardCheck size={15} />
+              </div>
+              <div className="spec-card__rows">
+                {engagementRows.map(([label, value]) => (
+                  <div className="spec-row" key={label}>
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="work__note reveal">
+              <Lock size={17} />
+              <div>
+                <strong>Confidential by default</strong>
+                Sample decks and models are shared under NDA during a consultation. Your information is never published or passed to third parties.
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Industries
+   ========================================================================== */
+
+function Industries() {
+  return (
+    <section className="section section--navy" id="industries">
+      <div className="container">
+        <div className="section-head">
+          <SectionIntro
+            light
+            kicker="Industries we work with"
+            title={<>We know how your <em>market reads a number.</em></>}
+            text="Every sector has its own definition of proof, its own diligence traps and its own investor profile. We adapt the story to the room you are actually in."
+          />
+          <div className="section-head__aside reveal">
+            <strong>Sector fluency, not sector labels</strong>
+            We build the benchmark, the metric hierarchy and the proof points your investors expect to see.
+          </div>
+        </div>
+
+        <div className="industries__grid">
+          {industries.map((industry, index) => (
+            <article className="industry reveal" style={{ '--delay': `${index * 40}ms` }} key={industry.name}>
+              <span className="industry__num">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{industry.name}</h3>
+                <p>{industry.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="industries__foot reveal">
+          <p>
+            Don't see your sector? We work across business models rather than a fixed list — if it has revenue,
+            unit economics and a growth story, we can build the case for it.
+          </p>
+          <a className="link-arrow" href="#contact">
+            Discuss your sector <ArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   About
+   ========================================================================== */
+
+function About() {
+  return (
+    <section className="section about" id="about">
+      <div className="container">
+        <div className="section-head">
+          <SectionIntro
+            kicker="About DG Global"
+            title={<>You are trusting us with a <em>fundraising process.</em></>}
+            text="So the background matters. DG Global was built by someone who has sat on the other side of the table — modelling businesses, negotiating transactions and defending numbers to investors."
+          />
+          <div className="section-head__aside reveal">
+            <strong>Fundraising advisory and investor communication</strong>
+            A single senior practitioner stays on your file from the first conversation to the last investor follow-up.
+          </div>
+        </div>
+
+        <div className="about__layout">
+          <div className="founder reveal">
+            <div className="founder__head">
+              <div className="founder__avatar" aria-hidden="true">DG</div>
+              <div>
+                <div className="founder__name">Dhruv Goyal</div>
+                <div className="founder__role">Founder &amp; Principal</div>
+              </div>
+            </div>
+            <div className="founder__body">
+              <p>
+                Dhruv founded DG Global to close a gap he kept hitting from inside finance and advisory work:
+                businesses with real traction were losing investor meetings because their story was hard to follow,
+                their numbers were not defensible, or both.
+              </p>
+              <p>
+                The practice brings together three things a fundraising package needs and rarely gets in one place —
+                financial rigour, transaction judgement and clear investor communication. The same person who frames
+                your strategy builds your model, writes your deck and rehearses your delivery.
+              </p>
+            </div>
+            <div className="founder__contact">
+              <a href="tel:+919876654294"><Phone size={15} />+91 98766 54294</a>
+              <a href="mailto:dhruvgoyal2944@gmail.com"><Mail size={15} />dhruvgoyal2944@gmail.com</a>
+            </div>
+          </div>
+
+          <div className="credentials">
+            {credentials.map((item, index) => {
+              const Icon = item.icon
+              return (
+                <div className="credential reveal" style={{ '--delay': `${index * 50}ms` }} key={item.title}>
+                  <span className="credential__icon"><Icon size={19} /></span>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="stat-strip reveal">
+          {stats.map(([value, label]) => (
+            <div className="stat" key={label}>
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+
+function Faq({ openBrief }) {
+  return (
+    <section className="section" id="faq">
+      <div className="container faq__layout">
+        <div className="faq__intro">
+          <SectionIntro kicker="Good to know" title={<>Questions before you <em>share your story?</em></>} />
+          <p className="reveal">
+            Still deciding whether we are the right fit? Start with a confidential brief — there is no commitment
+            and no hard sell.
+          </p>
+          <button className="text-link reveal" onClick={openBrief}>
+            Tell us about your company
+          </button>
+        </div>
+        <div className="faq__list">
+          {faqs.map((faq, index) => (
+            <details className="faq-item reveal" style={{ '--delay': `${index * 40}ms` }} key={faq.question}>
+              <summary>
+                <span>{faq.question}</span>
+                <i><ChevronDown size={17} /></i>
+              </summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+const contactRows = [
+  { icon: Clock3, label: 'Time to complete', value: 'About 4 minutes' },
+  { icon: Lock, label: 'Your information', value: 'Treated as confidential' },
+  { icon: FileText, label: 'What you get', value: 'A structured starting point' },
+]
+
+function Contact({ openBrief }) {
+  return (
+    <section className="contact" id="contact">
+      <div className="container contact__layout">
+        <div className="contact__copy">
+          <span className="kicker kicker--light">Book a consultation</span>
+          <h2>
+            Your business likely has more potential than your deck <em>currently shows.</em>
+          </h2>
+          <p>
+            Share the raw details — business, numbers, traction, the raise. We will help you find the sharp,
+            credible story inside them, and tell you honestly whether we are the right firm for the job.
+          </p>
+          <button className="button button--brass" onClick={openBrief}>
+            Start my confidential brief <ArrowRight size={17} />
+          </button>
+          <div className="contact__meta">
+            <a href="tel:+919876654294"><Phone size={15} />+91 98766 54294</a>
+            <a href="mailto:dhruvgoyal2944@gmail.com"><Mail size={15} />dhruvgoyal2944@gmail.com</a>
+          </div>
+        </div>
+
+        <div className="contact__card">
+          <div className="contact__card-head">Before we speak</div>
+          <div className="contact__rows">
+            {contactRows.map((row) => {
+              const Icon = row.icon
+              return (
+                <div className="contact__row" key={row.label}>
+                  <span className="contact__row-icon"><Icon size={17} /></span>
+                  <span>
+                    <small>{row.label}</small>
+                    <strong>{row.value}</strong>
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+          <div className="contact__card-foot">
+            <button className="button button--outline-light" onClick={openBrief}>
+              Begin the brief <ArrowRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+function Footer({ openBrief }) {
+  return (
+    <footer className="footer">
+      <div className="container footer__top">
+        <div className="footer__brand">
+          <Logo light />
+          <p>
+            Fundraising advisory and investor communication. Investor-ready pitch decks, financial storytelling
+            and fundraising materials for startups and growing businesses.
+          </p>
+          <div className="footer__contact">
+            <a href="tel:+919876654294"><Phone size={14} />+91 98766 54294</a>
+            <a href="mailto:dhruvgoyal2944@gmail.com"><Mail size={14} />dhruvgoyal2944@gmail.com</a>
+          </div>
+        </div>
+        <div className="footer__nav">
+          <span>Explore</span>
+          {navLinks.map(([label, href]) => (
+            <a key={href} href={href}>{label}</a>
+          ))}
+        </div>
+        <div className="footer__cta">
+          <p>Raising in the next six months? Start the conversation early — it materially improves the outcome.</p>
+          <button className="button button--brass button--small" onClick={openBrief}>
+            Book a consultation <ArrowRight size={16} />
+          </button>
+        </div>
+      </div>
+      <div className="container footer__bottom">
+        <p>© {new Date().getFullYear()} DG Global. All rights reserved.</p>
+        <p>Strategy <em>•</em> Financial modelling <em>•</em> Investor communication</p>
+      </div>
+    </footer>
+  )
+}
+
+/* ==========================================================================
+   Consultation modal
+   ========================================================================== */
+
+const briefSteps = [
+  { short: 'Company', title: 'First, the essentials.', text: 'A few details so we know who we are speaking with.' },
+  { short: 'Business', title: 'Tell us what you build.', text: 'Start with what you know. We will help shape the rest.' },
+  { short: 'Proof', title: 'Show us the signal.', text: 'The metrics and milestones that show your business is moving.' },
+  { short: 'Raise', title: 'What comes next?', text: 'Give us the goal, the use of funds and your ideal timeline.' },
+]
+
+function Field({ label, hint, required, error, children }) {
+  return (
+    <label className={`form-field ${error ? 'form-field--error' : ''}`}>
+      <span className="form-field__label">
+        {label}{required && <em>*</em>}{hint && <small>{hint}</small>}
+      </span>
+      {children}
+      {error && <span className="field-error">{error}</span>}
+    </label>
   )
 }
 
 function IntakeModal({ open, onClose }) {
-  const initialStep = 0
-  const [step, setStep] = useState(initialStep)
+  const [step, setStep] = useState(0)
   const [form, setForm] = useState(() => {
     try {
       const draft = localStorage.getItem('dg-global-pitch-brief')
@@ -348,12 +1135,7 @@ function IntakeModal({ open, onClose }) {
   const [result, setResult] = useState(null)
   const firstFieldRef = useRef(null)
 
-  const steps = [
-    { short: 'Company', title: 'First, the essentials.', text: 'A few details so we know who we are speaking with.' },
-    { short: 'Business', title: 'Tell us what you build.', text: 'Start with what you know. We will help shape the rest.' },
-    { short: 'Proof', title: 'Show us the signal.', text: 'The metrics and milestones that show your business is moving.' },
-    { short: 'Raise', title: 'What comes next?', text: 'Give us the goal, the use of funds and your ideal timeline.' },
-  ]
+  const steps = briefSteps
 
   useEffect(() => {
     if (!open) return undefined
@@ -455,49 +1237,69 @@ function IntakeModal({ open, onClose }) {
   }
 
   return (
-    <div className="modal-backdrop" role="presentation" onMouseDown={(event) => {
-      if (event.target === event.currentTarget && !submitting) onClose()
-    }}>
+    <div
+      className="modal-backdrop"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget && !submitting) onClose()
+      }}
+    >
       <div className="brief-modal" role="dialog" aria-modal="true" aria-labelledby="brief-title">
         <button className="brief-modal__close" type="button" onClick={onClose} disabled={submitting} aria-label="Close brief">
-          <X size={20} />
+          <X size={19} />
         </button>
 
         {result ? (
           <div className="brief-success">
-            <div className="brief-success__icon"><Check size={34} /></div>
+            <div className="brief-success__icon"><Check size={32} /></div>
             <span className="eyebrow">Brief received</span>
             <h2 id="brief-title">Your story is in good hands.</h2>
-            <p>Thank you, {form.contactName.split(' ')[0]}. We have received your confidential brief and will review it before we speak.</p>
+            <p>
+              Thank you, {form.contactName.split(' ')[0]}. We have received your confidential brief and will review
+              it before we speak.
+            </p>
             <div className="reference-card">
               <span>Your reference</span>
               <strong>{result.reference}</strong>
             </div>
             <div className="success-storyline">
               <span>What happens next</span>
-              <strong>Brief <i>→</i> Strategy <i>→</i> Story <i>→</i> Slides</strong>
+              <strong>Brief <i>→</i> Strategy <i>→</i> Model <i>→</i> Deck</strong>
             </div>
-            <button className="button button--dark button--wide" onClick={onClose}>Return to the website <ArrowRight size={17} /></button>
+            <button className="button button--navy button--wide" onClick={onClose}>
+              Return to the website <ArrowRight size={17} />
+            </button>
           </div>
         ) : (
           <>
             <aside className="brief-sidebar">
               <Logo light />
               <div>
-                <span className="brief-sidebar__label">Your deck starts here.</span>
+                <span className="brief-sidebar__label">Confidential by default</span>
                 <h3>Raw inputs.<br />Investor-ready story.</h3>
                 <p>About four minutes. Your answers save automatically on this device.</p>
+                <ul className="brief-sidebar__steps">
+                  {briefSteps.map((item, index) => (
+                    <li key={item.short}><b>{index + 1}</b> {item.short}</li>
+                  ))}
+                </ul>
               </div>
               <div className="brief-sidebar__trust">
-                <ShieldCheck size={17} />
-                <span><strong>Confidential by default</strong>Your information is used only to prepare your pitch.</span>
+                <ShieldCheck size={16} />
+                <span>
+                  <strong>Your information stays private</strong>
+                  Used only to prepare your pitch. Never published, never shared.
+                </span>
               </div>
             </aside>
 
             <div className="brief-content">
               <div className="brief-progress" aria-label={`Step ${step + 1} of ${steps.length}`}>
                 {steps.map((item, index) => (
-                  <div className={`brief-progress__step ${index === step ? 'is-active' : ''} ${index < step ? 'is-complete' : ''}`} key={item.short}>
+                  <div
+                    className={`brief-progress__step ${index === step ? 'is-active' : ''} ${index < step ? 'is-complete' : ''}`}
+                    key={item.short}
+                  >
                     <span>{index < step ? <Check size={13} /> : index + 1}</span>
                     <small>{item.short}</small>
                   </div>
@@ -540,7 +1342,7 @@ function IntakeModal({ open, onClose }) {
                         <div className="select-wrap">
                           <select ref={firstFieldRef} value={form.industry} onChange={(e) => update('industry', e.target.value)}>
                             <option value="">Select one</option>
-                            {industries.map((item) => <option key={item}>{item}</option>)}
+                            {industriesOptions.map((item) => <option key={item}>{item}</option>)}
                           </select>
                           <ChevronDown size={16} />
                         </div>
@@ -562,7 +1364,7 @@ function IntakeModal({ open, onClose }) {
                       <textarea maxLength={1200} value={form.customerProblem} onChange={(e) => update('customerProblem', e.target.value)} placeholder="What is painful, expensive or frustrating today?" />
                     </Field>
                     <Field label="How does your solution work?" hint="Optional">
-                      <textarea maxLength={1200} value={form.solution} onChange={(e) => update('solution', e.target.value)} placeholder="Give us the short version—we will help with the rest." />
+                      <textarea maxLength={1200} value={form.solution} onChange={(e) => update('solution', e.target.value)} placeholder="Give us the short version — we will help with the rest." />
                     </Field>
                     <Field label="Who do you serve?" hint="Optional">
                       <input value={form.targetMarket} onChange={(e) => update('targetMarket', e.target.value)} placeholder="Customer segments, industries, company sizes…" />
@@ -575,7 +1377,7 @@ function IntakeModal({ open, onClose }) {
 
                 {step === 2 && (
                   <>
-                    <Field label="Current revenue" required error={errors.revenue} hint="Enter ‘Pre-revenue’ if not applicable">
+                    <Field label="Current revenue" required error={errors.revenue} hint="Enter 'Pre-revenue' if not applicable">
                       <div className="input-with-icon"><CircleDollarSign size={16} /><input ref={firstFieldRef} value={form.revenue} onChange={(e) => update('revenue', e.target.value)} placeholder="e.g. $850K ARR, ₹4.2Cr revenue" /></div>
                     </Field>
                     <div className="form-grid form-grid--two">
@@ -587,7 +1389,7 @@ function IntakeModal({ open, onClose }) {
                       </Field>
                     </div>
                     <Field label="What is your strongest proof of traction?" required error={errors.traction}>
-                      <textarea maxLength={2000} value={form.traction} onChange={(e) => update('traction', e.target.value)} placeholder="Share milestones, growth, retention, partnerships, pilots, awards, customer quotes—anything that shows momentum." />
+                      <textarea maxLength={2000} value={form.traction} onChange={(e) => update('traction', e.target.value)} placeholder="Share milestones, growth, retention, partnerships, pilots, awards, customer quotes — anything that shows momentum." />
                     </Field>
                     <div className="form-grid form-grid--two">
                       <Field label="Certifications & partnerships" hint="Optional">
@@ -597,7 +1399,13 @@ function IntakeModal({ open, onClose }) {
                         <input value={form.geography} onChange={(e) => update('geography', e.target.value)} placeholder="e.g. India, SEA, Europe, global" />
                       </Field>
                     </div>
-                    <div className="form-tip"><Sparkles size={17} /><span><strong>Do not overthink the numbers.</strong> A raw, honest picture is more useful than a polished guess. We will shape the right investor narrative together.</span></div>
+                    <div className="form-tip">
+                      <Sparkles size={17} />
+                      <span>
+                        <strong>Do not overthink the numbers.</strong> A raw, honest picture is more useful than a
+                        polished guess. We will shape the right investor narrative together.
+                      </span>
+                    </div>
                   </>
                 )}
 
@@ -637,9 +1445,9 @@ function IntakeModal({ open, onClose }) {
                   {step === 0 ? 'Cancel' : 'Back'}
                 </button>
                 {step < steps.length - 1 ? (
-                  <button className="button button--dark" type="button" onClick={goNext}>Continue <ChevronRight size={17} /></button>
+                  <button className="button button--navy" type="button" onClick={goNext}>Continue <ChevronRight size={17} /></button>
                 ) : (
-                  <button className="button button--dark" type="button" onClick={submit} disabled={submitting}>
+                  <button className="button button--navy" type="button" onClick={submit} disabled={submitting}>
                     {submitting ? <><span className="spinner" /> Sending securely…</> : <>Send my brief <ArrowRight size={17} /></>}
                   </button>
                 )}
@@ -653,256 +1461,32 @@ function IntakeModal({ open, onClose }) {
   )
 }
 
-function Field({ label, hint, required, error, children }) {
-  return (
-    <label className={`form-field ${error ? 'form-field--error' : ''}`}>
-      <span className="form-field__label">{label}{required && <em>*</em>}{hint && <small>{hint}</small>}</span>
-      {children}
-      {error && <span className="field-error">{error}</span>}
-    </label>
-  )
-}
+/* ==========================================================================
+   App
+   ========================================================================== */
 
 function App() {
   const [briefOpen, setBriefOpen] = useState(false)
+  const openBrief = () => setBriefOpen(true)
   useReveal()
 
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <Header openBrief={() => setBriefOpen(true)} />
+      <Header openBrief={openBrief} />
 
       <main id="main">
-        <section className="hero" id="top">
-          <div className="hero__noise" />
-          <div className="container hero__grid">
-            <div className="hero__content">
-              <div className="hero__eyebrow"><span className="hero__eyebrow-dot" /> Pitch strategy, narrative & design <span>12+ years</span></div>
-              <h1>Turn your traction into a story <em>investors remember.</em></h1>
-              <p className="hero__lede">We help ambitious founders transform complex businesses into clear, credible and beautifully designed pitch decks.</p>
-              <div className="hero__actions">
-                <button className="button button--lime" onClick={() => setBriefOpen(true)}>Build my pitch deck <ArrowRight size={18} /></button>
-                <a className="text-link" href="#approach">See how we work <ArrowDown size={17} /></a>
-              </div>
-              <div className="hero__proof">
-                <div className="avatar-stack" aria-hidden="true">
-                  <span>DG</span><span>↗</span><span>✓</span>
-                </div>
-                <p><strong>Founder-led from day one.</strong><br />A senior expert stays close to your story.</p>
-              </div>
-            </div>
-            <HeroVisual />
-          </div>
-          <div className="container hero__footer">
-            <div><span>12+</span><p>years of<br />deck craft</p></div>
-            <div><span>100%</span><p>founder-led<br />attention</p></div>
-            <div><span>End-to-end</span><p>strategy to<br />final slide</p></div>
-            <p className="hero__scroll">Scroll to explore <span><ArrowDown size={15} /></span></p>
-          </div>
-        </section>
-
-        <section className="sector-strip" aria-label="Industries served">
-          <div className="container">
-            <p>Storytelling for ambitious teams across</p>
-            <div>
-              {['B2B SAAS', 'CONSUMER', 'FINTECH', 'HEALTHTECH', 'AI & DATA', 'CLIMATE'].map((sector) => <span key={sector}>{sector}</span>)}
-            </div>
-          </div>
-        </section>
-
-        <section className="section services" id="services">
-          <div className="container">
-            <div className="services__heading-row">
-              <SectionIntro
-                kicker="What we do"
-                title={<>A good deck is not decoration. <span>It is a decision tool.</span></>}
-                text="We connect your business data, market insight and founder knowledge into one persuasive, coherent story."
-              />
-              <p className="section-note reveal"><Zap size={18} /><span><strong>One senior team.</strong>No handoffs, no generic templates, no slide factory.</span></p>
-            </div>
-            <div className="services__grid">
-              {services.map((service, index) => {
-                const Icon = service.icon
-                return (
-                  <article className="service-card reveal" style={{ '--delay': `${index * 70}ms` }} key={service.title}>
-                    <div className="service-card__top"><span>{service.number}</span><Icon size={24} /></div>
-                    <div>
-                      <span className="service-card__tag">{service.tag}</span>
-                      <h3>{service.title}</h3>
-                      <p>{service.text}</p>
-                    </div>
-                    <div className="service-card__arrow"><ArrowRight size={18} /></div>
-                  </article>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="statement">
-          <div className="container statement__inner">
-            <div className="statement__mark reveal"><span>“</span></div>
-            <div className="statement__copy reveal">
-              <span className="kicker kicker--light"><span />Our point of view</span>
-              <h2>Fundraising is not just <em>what you say.</em> It is how clearly the room can <span>see the future with you.</span></h2>
-              <p>We reduce noise, sharpen the evidence and make every slide earn its place. The result is a deck that feels as credible as the business behind it.</p>
-              <button className="button button--outline-light" onClick={() => setBriefOpen(true)}>Start with your story <ArrowRight size={17} /></button>
-            </div>
-          </div>
-          <div className="statement__graphic" aria-hidden="true">
-            <span className="statement__circle statement__circle--one" />
-            <span className="statement__circle statement__circle--two" />
-            <span className="statement__line statement__line--one" />
-            <span className="statement__line statement__line--two" />
-            <span className="statement__cross statement__cross--one">+</span>
-            <span className="statement__cross statement__cross--two">+</span>
-          </div>
-        </section>
-
-        <section className="section deck" id="deck">
-          <div className="container deck__grid">
-            <div className="deck__visual reveal">
-              <div className="mini-deck">
-                <div className="mini-deck__top"><span>dg global / brief to investor story</span><span>01 — 09</span></div>
-                <div className="mini-deck__slide">
-                  <div className="mini-deck__number">01</div>
-                  <div>
-                    <span>OPEN WITH THE ANSWER</span>
-                    <h3>Start with the reason to care.</h3>
-                    <p>The submitted brief becomes a clear path from business context to market, product, proof and the raise.</p>
-                  </div>
-                  <div className="mini-deck__rule" />
-                </div>
-                <div className="mini-deck__dots"><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
-              </div>
-              <div className="narrative-card">
-                <span><Sparkles size={18} /></span>
-                <div><small>The narrative test</small><strong>Can someone repeat your story after one read?</strong></div>
-              </div>
-            </div>
-            <div className="deck__content">
-              <SectionIntro
-                kicker="After you submit · Deck flow"
-                title={<>Your brief becomes a <span>clear investor narrative.</span></>}
-                text="We organize the information you share into a deliberate deck flow—each chapter removes doubt and earns the next."
-              />
-              <div className="deck-list">
-                {deckSections.map(([number, title, text], index) => (
-                  <div className="deck-list__item reveal" style={{ '--delay': `${index * 35}ms` }} key={number}>
-                    <span>{number}</span><div><h3>{title}</h3><p>{text}</p></div><ArrowRight size={17} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section approach" id="approach">
-          <div className="container">
-            <div className="approach__heading">
-              <SectionIntro
-                kicker="Our approach"
-                title={<>Clarity first. <span>Craft everywhere.</span></>}
-                text="A focused, collaborative process that respects your time and gets to the heart of the business."
-              />
-              <div className="approach__badge reveal"><span>12+</span><p>years turning<br />complexity into clarity</p></div>
-            </div>
-            <div className="process">
-              {process.map((item, index) => (
-                <article className="process__step reveal" style={{ '--delay': `${index * 80}ms` }} key={item.number}>
-                  <div className="process__top"><span>{item.number}</span>{index < process.length - 1 && <i />}</div>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </article>
-              ))}
-            </div>
-            <div className="approach__detail reveal">
-              <div className="approach__detail-icon"><Layers3 size={25} /></div>
-              <div><span>What you leave with</span><h3>Not just slides—a pitch you can own.</h3></div>
-              <p>A clear strategic narrative, an investor-ready deck, a source-of-truth document and the confidence to tell the story live.</p>
-              <button className="icon-button" onClick={() => setBriefOpen(true)} aria-label="Start your project brief"><ArrowRight size={21} /></button>
-            </div>
-          </div>
-        </section>
-
-        <section className="difference">
-          <div className="container difference__grid">
-            <div className="difference__heading reveal">
-              <span className="kicker"><span />Why DG Global</span>
-              <h2>Built for the questions investors will actually ask.</h2>
-            </div>
-            <div className="difference__items">
-              <div className="difference__item reveal">
-                <span>01</span><div><h3>Strategy before slides</h3><p>We resolve the core narrative before touching the presentation.</p></div>
-              </div>
-              <div className="difference__item reveal">
-                <span>02</span><div><h3>Evidence over adjectives</h3><p>Every claim connects to a fact, insight or measurable proof point.</p></div>
-              </div>
-              <div className="difference__item reveal">
-                <span>03</span><div><h3>Design with intent</h3><p>Every visual helps the investor understand, compare and remember.</p></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section faq" id="faq">
-          <div className="container faq__grid">
-            <div className="faq__intro">
-              <SectionIntro kicker="Good to know" title={<>Questions before you <span>share your story?</span></>} />
-              <p className="reveal">Still wondering whether we are the right fit? Start with your brief—there is no commitment and no hard sell.</p>
-              <button className="text-link text-link--dark reveal" onClick={() => setBriefOpen(true)}>Tell us about your company <ArrowRight size={17} /></button>
-            </div>
-            <div className="faq__list">
-              {faqs.map((faq, index) => (
-                <details className="faq-item reveal" style={{ '--delay': `${index * 45}ms` }} key={faq.question}>
-                  <summary><span>{faq.question}</span><i><ChevronDown size={18} /></i></summary>
-                  <p>{faq.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="final-cta" id="contact">
-          <div className="container final-cta__inner">
-            <div className="final-cta__copy reveal">
-              <span className="kicker kicker--light"><span />Your next round starts here</span>
-              <h2>Your business has more potential than your deck shows.</h2>
-              <p>Share the raw details. We will help you find the sharp, credible story inside them.</p>
-              <button className="button button--lime" onClick={() => setBriefOpen(true)}>Start my confidential brief <ArrowRight size={18} /></button>
-              <div className="direct-contact" aria-label="Direct contact details">
-                <span>Prefer to talk?</span>
-                <a href="tel:+919876654294"><Phone size={14} />+91 98766 54294</a>
-                <a href="mailto:dhruvgoyal2944@gmail.com"><Mail size={14} />dhruvgoyal2944@gmail.com</a>
-              </div>
-            </div>
-            <div className="final-cta__side reveal">
-              <div><Clock3 size={18} /><span><small>Time to complete</small><strong>About 4 minutes</strong></span></div>
-              <div><ShieldCheck size={18} /><span><small>Your information</small><strong>Treated as confidential</strong></span></div>
-              <div><FileText size={18} /><span><small>What you get</small><strong>A structured starting point</strong></span></div>
-            </div>
-          </div>
-        </section>
+        <Hero openBrief={openBrief} />
+        <Services />
+        <Work />
+        <Process openBrief={openBrief} />
+        <Industries />
+        <About />
+        <Faq openBrief={openBrief} />
+        <Contact openBrief={openBrief} />
       </main>
 
-      <footer className="footer">
-        <div className="container footer__top">
-          <div>
-            <Logo light />
-            <p>Pitch strategy, narrative and design for ambitious companies.</p>
-            <div className="footer__contact">
-              <a href="tel:+919876654294"><Phone size={13} />+91 98766 54294</a>
-              <a href="mailto:dhruvgoyal2944@gmail.com"><Mail size={13} />dhruvgoyal2944@gmail.com</a>
-            </div>
-          </div>
-          <div className="footer__links"><a href="#services">Services</a><a href="#approach">Approach</a><a href="#deck">Deck anatomy</a><a href="#faq">FAQ</a></div>
-          <button className="footer__cta" onClick={() => setBriefOpen(true)}>Start a project <ArrowRight size={17} /></button>
-        </div>
-        <div className="container footer__bottom">
-          <p>© {new Date().getFullYear()} DG Global Pitch Studio. All rights reserved.</p>
-          <p>Strategy <span>•</span> Narrative <span>•</span> Design</p>
-        </div>
-      </footer>
+      <Footer openBrief={openBrief} />
 
       <IntakeModal open={briefOpen} onClose={() => setBriefOpen(false)} />
     </>
